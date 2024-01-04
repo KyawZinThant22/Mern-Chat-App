@@ -1,0 +1,22 @@
+{
+  "name": "mern_stack_chat_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "devStart": "ts-node backend/server.ts"
+  },
+  "author": "Kyaw Zin Thant",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
