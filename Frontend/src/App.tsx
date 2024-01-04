@@ -1,7 +1,17 @@
-import "./App.css";
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import HomePage from './pages/HomePage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
-  return <>Marn chat app</>;
+   return (
+      <>
+         <Routes>
+            <Route path="/" Component={HomePage} />
+            <Route path="/chats" Component={ChatPage} />
+         </Routes>
+      </>
+   );
 }
 
 export default App;
