@@ -15,32 +15,37 @@ export const registerUser = asyncHandler(async (req, res, next) => {
       throw new Error('Please Enter all the Feilds');
    }
 
-   const userExists = await userModel.findOne({ email });
+   try {
+      const userExists = await userModel.findOne({ email });
 
-   if (userExists) {
-      res.status(400);
-      throw new Error('User already exists');
-   }
+      if (userExists) {
+         res.status(400);
+         throw new Error('User already exists');
+      }
 
-   const user = await userModel.create({
-      name,
-      email,
-      password,
-      pic,
-   });
-
-   if (user) {
-      res.status(201).json({
-         _id: user._id,
-         name: user.name,
-         email: user.email,
-         isAdmin: user.isAdmin,
-         pic: user.pic,
-         token: generateToken(user._id),
+      const user = await userModel.create({
+         name,
+         email,
+         password,
+         pic,
       });
-   } else {
-      res.status(400);
-      throw new Error('User not found');
+
+      if (user) {
+         res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            pic: user.pic,
+            token: generateToken(user._id),
+         });
+      } else {
+         res.status(400);
+         throw new Error('User not found');
+      }
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
    }
 });
 
@@ -50,21 +55,23 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 export const authLogin = asyncHandler(async (req, res, next) => {
    const { email, password } = req.body;
 
-   const user = await userModel.findOne({ email });
-
-
-   if (user && (await user.matchPassword(password))) {
-      res.status(201).json({
-         _id: user._id,
-         name: user.name,
-         email: user.email,
-         isAdmin: user.isAdmin,
-         pic: user.pic,
-         token: generateToken(user._id),
-      });
-
-   } else {
-      res.status(400);
-      throw new Error('User not found');
+   try {
+      const user = await userModel.findOne({ email });
+      if (user && (await user.matchPassword(password))) {
+         res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            pic: user.pic,
+            token: generateToken(user._id),
+         });
+      } else {
+         res.status(400);
+         throw new Error('User not found');
+      }
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
    }
 });
