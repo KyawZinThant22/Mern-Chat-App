@@ -20,7 +20,6 @@ const Signup = () => {
    const [password, setPassword] = useState<string>('');
    const [loading, setloading] = useState<boolean>(false);
    const [pic, setPic] = useState<string>('');
-   const [picLoading, setPicLoading] = useState<boolean>(false);
    const toast = useToast();
    const navigate = useNavigate()
 
@@ -80,7 +79,7 @@ const Signup = () => {
    };
 
    const submitHandler = async () => {
-      setPicLoading(true);
+      setloading(true);
       if (!name || !email || !password) {
          toast({
             title: 'Please Fill all the Feilds',
@@ -89,7 +88,7 @@ const Signup = () => {
             isClosable: true,
             position: 'bottom',
          });
-         setPicLoading(false);
+         setloading(false);
          return;
       }
 
@@ -118,7 +117,7 @@ const Signup = () => {
             position: 'bottom',
          });
          localStorage.setItem("userInfo", JSON.stringify(data));
-         setPicLoading(false);
+         setloading(false);
          navigate("/chat")
       } catch (err) {
          console.log(err);
