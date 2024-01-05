@@ -1,9 +1,10 @@
 import express from "express"
-import { authLogin, registerUser } from "../controller/UserController";
+import { authLogin, getAllUser, registerUser } from "../controller/UserController";
 
 const Router = express.Router();
 
 Router.post("/", registerUser)
+Router.get("/", getAllUser)
 Router.post("/login", authLogin)
 
 

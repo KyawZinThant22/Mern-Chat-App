@@ -3,6 +3,24 @@ import userModel from '../Models/userModel';
 import { Request, Response } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import { generateToken } from '../config/generateToken';
+import ExtendedRequest from '../utils/extentRequest';
+
+
+//@description     get all users
+//@route           POST /api/user/
+//@access          Public
+
+export const getAllUser = asyncHandler(async ( req : ExtendedRequest , res , next)=>{
+   const keyword = req.query.search ? {
+      $or: [
+         { name: { $regex: req.query.search, $options: "i" } },
+         { email: { $regex: req.query.search, $options: "i" } },
+       ],
+   }:{};
+   console.log(req.user)
+   const users = await userModel.find(keyword).find( { _id: { $ne: req?.user?._id }  });
+   res.send(users);
+})
 
 //@description     Register new user
 //@route           POST /api/user/

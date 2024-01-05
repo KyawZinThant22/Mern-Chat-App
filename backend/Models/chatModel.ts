@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 // Define an interface for the Chat model
-interface IChat extends Document {
+export interface IChat extends Document {
   chatName: string;
   isGroupChat: boolean;
 }

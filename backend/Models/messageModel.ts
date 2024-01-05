@@ -13,7 +13,7 @@ interface IChat {
 }
 
 // Define an interface for the Message model
-interface IMessage extends Document {
+export interface IMessage extends Document {
   sender: IUser['_id'];
   content: string;
   chat: IChat['_id'];
