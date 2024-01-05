@@ -20,6 +20,17 @@ const Login = () => {
    const toast = useToast();
    const navigate = useNavigate();
 
+
+   const getGuestInfo = () => {
+      setEmail("guestUser@gmail.com")
+      setPassword("guestpassword23")
+   }
+
+   const reset = () => {
+      setEmail("")
+      setPassword("")
+   }
+
    const submitHandler = async () => {
       setLoading(true);
 
@@ -31,6 +42,7 @@ const Login = () => {
             isClosable: true,
             position: 'bottom',
          });
+         reset()
          setLoading(false);
          return;
       }
@@ -68,6 +80,7 @@ const Login = () => {
             isClosable: true,
             position: 'bottom',
          });
+         reset()
          setLoading(false);
       }
    };
@@ -75,12 +88,13 @@ const Login = () => {
       <VStack spacing={'5px'}>
          <FormControl isRequired>
             <FormLabel>Email</FormLabel>
-            <Input placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+            <Input value={email} placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
          </FormControl>
          <FormControl isRequired>
             <FormLabel>Password</FormLabel>
             <InputGroup>
                <Input
+               value={password}
                   type={show ? 'text' : 'password'}
                   placeholder="Enter your password"
                   onChange={(e) => setPassword(e.target.value)}
@@ -101,6 +115,16 @@ const Login = () => {
             onClick={submitHandler}
          >
             Login
+         </Button>
+
+         <Button
+            isLoading={loading}
+            colorScheme="red"
+            width="100%"
+            style={{ marginTop: 15 }}
+            onClick={getGuestInfo}
+         >
+            Get Guest User credential
          </Button>
       </VStack>
    );
