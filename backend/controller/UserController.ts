@@ -9,7 +9,6 @@ import ExtendedRequest from '../utils/extentRequest';
 //@description     get all users
 //@route           POST /api/user/
 //@access          Public
-
 export const getAllUser = asyncHandler(async ( req : ExtendedRequest , res , next)=>{
    const keyword = req.query.search ? {
       $or: [
