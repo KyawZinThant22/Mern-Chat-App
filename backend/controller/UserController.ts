@@ -55,7 +55,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
             email: user.email,
             isAdmin: user.isAdmin,
             pic: user.pic,
-            token: generateToken(user._id),
+            token: generateToken(user.email),
          });
       } else {
          res.status(400);
@@ -100,8 +100,9 @@ export const authLogin = asyncHandler(async (req, res, next) => {
 
 export const getMe = asyncHandler(
    async (req: ExtendedRequest, res: Response, next): Promise<void> => {
+      console.log("get me function")
       try {
-         const user = await userModel.findOne({ email: req.user.email }).select('-password');
+         const user = await userModel.findById({ _id: req.user._id }).select('-password');
 
          if (!user) {
             res.status(404).json({ success: false, message: 'User not found' });
@@ -114,7 +115,8 @@ export const getMe = asyncHandler(
          });
       } catch (err) {
          // Handle errors here if needed
-         next(err);
+         console.log(err)
+         // next(err);
       }
    },
 );

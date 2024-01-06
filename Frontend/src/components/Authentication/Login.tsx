@@ -34,8 +34,6 @@ const Login = () => {
       setPassword('');
    };
 
-   
-
    const submitHandler = async () => {
       setLoading(true);
 
@@ -59,11 +57,7 @@ const Login = () => {
             },
          };
 
-         const { data } = await api.post(
-            '/api/user/login',
-            { email, password },
-            config,
-         );
+         const { data } = await api.post('/api/user/login', { email, password }, config);
 
          toast({
             title: 'Login Successful',
@@ -98,7 +92,7 @@ const Login = () => {
             position: 'bottom',
          });
          reset();
-         dispatch(setUnAuth())
+         dispatch(setUnAuth());
          setLoading(false);
       }
    };

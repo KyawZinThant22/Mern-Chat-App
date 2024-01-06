@@ -18,16 +18,20 @@ export const protect = asyncHandler(async (req: ExtendedRequest, res: Response, 
     token = req.headers.authorization.split(' ')[1];
   }
 
+
   if (!token) {
     return next(new ErrorResponse(authRequiredError, 401));
   }
 
+
   // Verify token
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string ) as any;
+    console.log("decoded",typeof decoded)
     
     // Check if the user exists in the database
     const user = await userModel.findById(decoded.id).select('-password');
+    console.log('user' , user)
 
     if (!user) {
       return next(new ErrorResponse(authRequiredError, 401));

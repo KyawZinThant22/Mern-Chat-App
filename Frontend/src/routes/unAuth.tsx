@@ -1,7 +1,7 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import { HomePage } from "./Elements";
 
-export default function unAuth() {
+export default function UnAuth() {
     return useRoutes([
         {
             path : "/",
