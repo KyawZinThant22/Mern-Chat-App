@@ -5,21 +5,22 @@ import asyncHandler from '../middleware/asyncHandler';
 import { generateToken } from '../config/generateToken';
 import ExtendedRequest from '../utils/extentRequest';
 
-
 //@description     get all users
 //@route           POST /api/user/
 //@access          Public
-export const getAllUser = asyncHandler(async ( req : ExtendedRequest , res , next)=>{
-   const keyword = req.query.search ? {
-      $or: [
-         { name: { $regex: req.query.search, $options: "i" } },
-         { email: { $regex: req.query.search, $options: "i" } },
-       ],
-   }:{};
-   console.log(req.user)
-   const users = await userModel.find(keyword).find( { _id: { $ne: req?.user?._id }  });
+export const getAllUser = asyncHandler(async (req: ExtendedRequest, res, next) => {
+   const keyword = req.query.search
+      ? {
+           $or: [
+              { name: { $regex: req.query.search, $options: 'i' } },
+              { email: { $regex: req.query.search, $options: 'i' } },
+           ],
+        }
+      : {};
+   console.log(req.user);
+   const users = await userModel.find(keyword).find({ _id: { $ne: req?.user?._id } });
    res.send(users);
-})
+});
 
 //@description     Register new user
 //@route           POST /api/user/
@@ -92,3 +93,28 @@ export const authLogin = asyncHandler(async (req, res, next) => {
       res.status(500).json({ message: 'Internal Server Error' });
    }
 });
+
+//@description     get current user
+//@route           POST /api/user/me
+//@access          Private
+
+export const getMe = asyncHandler(
+   async (req: ExtendedRequest, res: Response, next): Promise<void> => {
+      try {
+         const user = await userModel.findOne({ email: req.user.email }).select('-password');
+
+         if (!user) {
+            res.status(404).json({ success: false, message: 'User not found' });
+            return;
+         }
+
+         res.status(200).json({
+            success: true,
+            data: user,
+         });
+      } catch (err) {
+         // Handle errors here if needed
+         next(err);
+      }
+   },
+);

@@ -4,7 +4,7 @@ import  { IMessage } from '../Models/messageModel';
 import { Request } from 'express';
 
 interface ExtendedRequest extends Request {
-    user: any;
+    user: IUser;
     message: IMessage;
     chat: IChat;
   }

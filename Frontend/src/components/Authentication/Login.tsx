@@ -10,7 +10,9 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setAuthUser, setUnAuth } from '../../store/reducers/auth';
 
 const Login = () => {
    const [email, setEmail] = useState<string>('');
@@ -20,16 +22,17 @@ const Login = () => {
    const toast = useToast();
    const navigate = useNavigate();
 
+   const dispatch = useDispatch();
 
    const getGuestInfo = () => {
-      setEmail("guestUser@gmail.com")
-      setPassword("guestpassword23")
-   }
+      setEmail('guestUser@gmail.com');
+      setPassword('guestpassword23');
+   };
 
    const reset = () => {
-      setEmail("")
-      setPassword("")
-   }
+      setEmail('');
+      setPassword('');
+   };
 
    const submitHandler = async () => {
       setLoading(true);
@@ -42,7 +45,7 @@ const Login = () => {
             isClosable: true,
             position: 'bottom',
          });
-         reset()
+         reset();
          setLoading(false);
          return;
       }
@@ -68,7 +71,19 @@ const Login = () => {
             position: 'bottom',
          });
 
-         localStorage.setItem('userInfo', JSON.stringify(data));
+         localStorage.setItem('token', data.token);
+         dispatch(
+            setAuthUser({
+               user: {
+                  id: data._id,
+                  name: data.name,
+                  email: data.email,
+                  pic: data.pic,
+               },
+               token: data.token,
+            }),
+         );
+
          setLoading(false);
          navigate('/chats');
       } catch (err: any) {
@@ -80,7 +95,8 @@ const Login = () => {
             isClosable: true,
             position: 'bottom',
          });
-         reset()
+         reset();
+         dispatch(setUnAuth())
          setLoading(false);
       }
    };
@@ -88,13 +104,17 @@ const Login = () => {
       <VStack spacing={'5px'}>
          <FormControl isRequired>
             <FormLabel>Email</FormLabel>
-            <Input value={email} placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+            <Input
+               value={email}
+               placeholder="Enter your email"
+               onChange={(e) => setEmail(e.target.value)}
+            />
          </FormControl>
          <FormControl isRequired>
             <FormLabel>Password</FormLabel>
             <InputGroup>
                <Input
-               value={password}
+                  value={password}
                   type={show ? 'text' : 'password'}
                   placeholder="Enter your password"
                   onChange={(e) => setPassword(e.target.value)}

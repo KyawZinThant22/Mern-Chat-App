@@ -2,9 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
+    id : any
    name: string;
    email: string;
-   image: any;
+   pic: any;
 }
 const JWTToken = localStorage.getItem('token');
 
@@ -14,13 +15,18 @@ interface initializeData {
    authSuccess: boolean;
 }
 
+interface UserPayload {
+    user: User | {};
+    token: string;
+}
+
 const initialState = { user: {}, token: JWTToken || '', authSuccess: false } as initializeData;
 
 const authSlice = createSlice({
    name: 'auth',
    initialState,
    reducers: {
-      setAuthUser(state, action: PayloadAction<initializeData>) {
+      setAuthUser(state, action: PayloadAction<UserPayload>) {
          (state.user = action.payload.user), (state.token = action.payload.token);
          state.authSuccess = true;
       },
