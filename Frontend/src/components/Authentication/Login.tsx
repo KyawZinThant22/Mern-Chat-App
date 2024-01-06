@@ -8,11 +8,11 @@ import {
    VStack,
    useToast,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setAuthUser, setUnAuth } from '../../store/reducers/auth';
+import { api } from '../../utils/api';
 
 const Login = () => {
    const [email, setEmail] = useState<string>('');
@@ -33,6 +33,8 @@ const Login = () => {
       setEmail('');
       setPassword('');
    };
+
+   
 
    const submitHandler = async () => {
       setLoading(true);
@@ -57,8 +59,8 @@ const Login = () => {
             },
          };
 
-         const { data } = await axios.post(
-            'http://localhost:8080/api/user/login',
+         const { data } = await api.post(
+            '/api/user/login',
             { email, password },
             config,
          );
