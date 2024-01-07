@@ -17,7 +17,6 @@ export const getAllUser = asyncHandler(async (req: ExtendedRequest, res, next) =
            ],
         }
       : {};
-   console.log(req.user);
    const users = await userModel.find(keyword).find({ _id: { $ne: req?.user?._id } });
    res.send(users);
 });

@@ -27,10 +27,10 @@ export const protect = asyncHandler(async (req: ExtendedRequest, res: Response, 
   // Verify token
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string ) as any;
-    console.log("decoded",typeof decoded)
+    console.log("decoded",decoded)
     
     // Check if the user exists in the database
-    const user = await userModel.findById(decoded.id).select('-password');
+    const user = await userModel.findById(decoded.email).select('-password');
     console.log('user' , user)
 
     if (!user) {
