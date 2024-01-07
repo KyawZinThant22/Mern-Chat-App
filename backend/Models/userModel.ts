@@ -44,6 +44,6 @@ userSchema.pre('save', async function (next) {
    this.password = await bcrypt.hash(this.password, salt);
 });
 
-const userModel = model<IUser>('User', userSchema);
+const userModel = model<any>('User', userSchema);
 
 export default userModel;

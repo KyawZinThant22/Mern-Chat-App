@@ -1,19 +1,18 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
-// Define an interface for the Chat model
-export interface IChat extends Document {
-  chatName: string;
-  isGroupChat: boolean;
-}
+// Interface for User document reference
 
-// Define the chat schema
-const chatSchema = new Schema<IChat>(
-  {
-    chatName: { type: String, trim: true, required: true },
-    isGroupChat: { type: Boolean, default: false },
-  },
+const chatSchema = new Schema(
+   {
+      chatName: { type: String, trim: true, required: true },
+      isGroupChat: { type: Boolean, default: false },
+      users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+      latestMessage: { type: Schema.Types.ObjectId, ref: 'Message' },
+      groupAdmin: { type: Schema.Types.ObjectId, ref: 'User' },
+   },
+   { timestamps: true },
 );
 
 // Define and export the Chat model
-const Chat = mongoose.model<IChat>('Chat', chatSchema);
+const Chat = mongoose.model('Chat', chatSchema);
 export default Chat;
