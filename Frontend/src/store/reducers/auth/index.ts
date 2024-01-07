@@ -18,7 +18,7 @@ interface initializeData {
 
 interface UserPayload {
   user: User | null
-  token: string;
+  token: string | '';
 }
 
 const initialState: initializeData = {

@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 
 import Admin from './Admin';
 import UnAuth from './unAuth';
-import { setUnAuth } from '../store/reducers/auth';
+import { setAuthUser, setUnAuth } from '../store/reducers/auth';
 import axios from 'axios';
-import { HomePage } from './Elements';
+
 
 
 export default function Routes() {
@@ -27,7 +27,18 @@ export default function Routes() {
                Authorization: `Bearer ${token}`,
             },
          });
-         console.log(response.data);
+         if (response.data.success){
+            dispatch(setAuthUser({
+               user : {
+                  id : response.data.data._id,
+                  name : response.data.data.name,
+                  email : response.data.data.email,
+                  pic : response.data.data.pic,
+               },
+               token : cookieToken || "",
+            }))
+            setLoading(false)
+         }
       } catch (error) {
          console.error(error);
       }
@@ -46,7 +57,7 @@ export default function Routes() {
       }
    }, [cookieToken]);
 
-   if (loading) return <h1>loading</h1>;
+   if (loading) return <h1 className='text-[20rem]' >loading</h1>;
 
-   return <HomePage/>
+   return auth.authSuccess && auth.user?.id ? < Admin/> : <UnAuth/>
 }
