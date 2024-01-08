@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Chat from '../Models/chatModel';
 import userModel from '../Models/userModel';
 import asyncHandler from '../middleware/asyncHandler';
@@ -52,6 +53,9 @@ export const accessChat = asyncHandler(async (req: ExtendedRequest, res, next): 
    }
 });
 
+//@description     fetch all chat
+//@route           POST /api/chat/
+//@access          Protected
 export const fetchChats = asyncHandler(async (req: ExtendedRequest, res, next) => {
    try {
       Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
@@ -73,3 +77,42 @@ export const fetchChats = asyncHandler(async (req: ExtendedRequest, res, next) =
       throw new Error(err.message);
    }
 });
+
+//@description     create group chat
+//@route           POST /api/chat/group
+//@access          Protected
+
+export const createGroupChat = asyncHandler(
+   async (req: ExtendedRequest, res, next): Promise<any> => {
+     if (!req.body.users || !req.body.name) {
+       return res.status(400).json({ message: 'Please fill all these fields' });
+     }
+ 
+     try {
+       let users = JSON.parse(req.body.users.replace(/'/g, "\""));
+ 
+       if (users.length < 2) {
+         return res.status(400).json({ message: 'More than 2 users are required to create a group' });
+       }
+ 
+       users.push(req.user);
+ 
+       const groupChat = await Chat.create({
+         chatName: req.body.name,
+         users: users,
+         isGroupChat: true,
+         groupAdmin: req.user,
+       });
+ 
+       const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
+         .populate('users', '-password')
+         .populate('groupAdmin', '-password');
+ 
+       res.status(200).json(fullGroupChat);
+     } catch (error) {
+       console.log(error);
+       res.status(400).send({ message: error.message });
+     }
+   },
+ );
+ 
