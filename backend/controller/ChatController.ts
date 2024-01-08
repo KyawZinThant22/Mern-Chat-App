@@ -51,3 +51,25 @@ export const accessChat = asyncHandler(async (req: ExtendedRequest, res, next): 
       }
    }
 });
+
+export const fetchChats = asyncHandler(async (req: ExtendedRequest, res, next) => {
+   try {
+      Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+         .populate('users', '-password')
+         .populate('groupAdmin', '-password')
+         .populate('latestMessage')
+         .sort({ updatedAt: -1 })
+         .then(async (result) => {
+            result = await userModel.populate(result, {
+               path: 'latestMessage.sender',
+               select: 'name pic email',
+            });
+
+            res.status(200).send(result);
+         });
+   } catch (err) {
+      console.log(err);
+      res.status(400);
+      throw new Error(err.message);
+   }
+});
