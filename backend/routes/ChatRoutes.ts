@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
    accessChat,
+   addtoChat,
    createGroupChat,
    fetchChats,
    removeFromChat,
@@ -15,5 +16,6 @@ router.get('/', protect, fetchChats);
 router.post('/group', protect, createGroupChat);
 router.put('/group/rename', protect, renameGroupChat);
 router.put('/group/remove', protect, removeFromChat);
+router.put("/group/add", protect , addtoChat)
 
 export default router;

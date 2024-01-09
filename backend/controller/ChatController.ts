@@ -163,16 +163,49 @@ export const removeFromChat = asyncHandler(async (req: ExtendedRequest, res, nex
          },
       )
          .populate('users', '-password')
-         .populate('grpupAdmin', '-password');
+         .populate('groupAdmin', '-password');
 
-         if(!removedChat){
-            res.status(404)
-            throw new Error("Chat Not found")
-         }else {
-            res.status(201).json(removedChat)
-         }
+      if (!removedChat) {
+         res.status(404);
+         throw new Error('Chat Not found');
+      } else {
+         res.status(201).json(removedChat);
+      }
    } catch (err) {
       console.log(err);
+      res.status(400).json({
+         message: err.message,
+      });
+   }
+});
+
+//@description     add to chat
+//@route           PUT /api/chat/group/add
+//@access          Protected
+
+export const addtoChat = asyncHandler(async (req: ExtendedRequest, res, next) => {
+   const { chatId, userId } = req.body;
+
+   try {
+      const addtoChat = await Chat.findByIdAndUpdate(
+         chatId,
+         {
+            $push: { users: userId },
+         },
+         {
+            new: true,
+         },
+      )
+         .populate('users', '-password')
+         .populate('groupAdmin', '-password');
+
+      if (!addtoChat) {
+         res.status(404);
+         throw new Error('Chat Not found');
+      } else {
+         res.status(201).json(addtoChat);
+      }
+   } catch (err) {
       res.status(400).json({
          message: err.message,
       });
