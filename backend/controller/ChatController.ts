@@ -84,35 +84,64 @@ export const fetchChats = asyncHandler(async (req: ExtendedRequest, res, next) =
 
 export const createGroupChat = asyncHandler(
    async (req: ExtendedRequest, res, next): Promise<any> => {
-     if (!req.body.users || !req.body.name) {
-       return res.status(400).json({ message: 'Please fill all these fields' });
-     }
- 
-     try {
-       let users = JSON.parse(req.body.users.replace(/'/g, "\""));
- 
-       if (users.length < 2) {
-         return res.status(400).json({ message: 'More than 2 users are required to create a group' });
-       }
- 
-       users.push(req.user);
- 
-       const groupChat = await Chat.create({
-         chatName: req.body.name,
-         users: users,
-         isGroupChat: true,
-         groupAdmin: req.user,
-       });
- 
-       const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
-         .populate('users', '-password')
-         .populate('groupAdmin', '-password');
- 
-       res.status(200).json(fullGroupChat);
-     } catch (error) {
-       console.log(error);
-       res.status(400).send({ message: error.message });
-     }
+      if (!req.body.users || !req.body.name) {
+         return res.status(400).json({ message: 'Please fill all these fields' });
+      }
+
+      try {
+         let users = JSON.parse(req.body.users.replace(/'/g, '"'));
+
+         if (users.length < 2) {
+            return res
+               .status(400)
+               .json({ message: 'More than 2 users are required to create a group' });
+         }
+
+         users.push(req.user);
+
+         const groupChat = await Chat.create({
+            chatName: req.body.name,
+            users: users,
+            isGroupChat: true,
+            groupAdmin: req.user,
+         });
+
+         const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
+            .populate('users', '-password')
+            .populate('groupAdmin', '-password');
+
+         res.status(200).json(fullGroupChat);
+      } catch (error) {
+         console.log(error);
+         res.status(400).send({ message: error.message });
+      }
    },
- );
- 
+);
+
+//@description     create rename chat
+//@route           POST /api/chat/group/rename
+//@access          Protected
+
+export const renameGroupChat = asyncHandler(async (req: ExtendedRequest, res, next) => {
+   const { chatId, chatName } = req.body;
+   console.log("chatId", chatId , 'chatName' , chatName)
+
+   const updatedChat = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+         chatName: chatName,
+      },
+      {
+         new: true,
+      },
+   )
+      .populate('users', '-password')
+      .populate('groupAdmin', '-password');
+
+   if (!updatedChat) {
+      res.status(400);
+      throw new Error('Chat Not found');
+   } else {
+      res.status(200).json(updatedChat);
+   }
+});
