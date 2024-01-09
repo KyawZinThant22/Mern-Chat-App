@@ -119,12 +119,12 @@ export const createGroupChat = asyncHandler(
 );
 
 //@description     create rename chat
-//@route           POST /api/chat/group/rename
+//@route           PUT /api/chat/group/rename
 //@access          Protected
 
 export const renameGroupChat = asyncHandler(async (req: ExtendedRequest, res, next) => {
    const { chatId, chatName } = req.body;
-   console.log("chatId", chatId , 'chatName' , chatName)
+   console.log('chatId', chatId, 'chatName', chatName);
 
    const updatedChat = await Chat.findByIdAndUpdate(
       chatId,
@@ -143,5 +143,38 @@ export const renameGroupChat = asyncHandler(async (req: ExtendedRequest, res, ne
       throw new Error('Chat Not found');
    } else {
       res.status(200).json(updatedChat);
+   }
+});
+
+//@description     remove from chat
+//@route           PUT /api/chat/group/remove
+//@access          Protected
+
+export const removeFromChat = asyncHandler(async (req: ExtendedRequest, res, next) => {
+   const { chatId, userId } = req.body;
+   try {
+      const removedChat = await Chat.findByIdAndUpdate(
+         chatId,
+         {
+            $pull: { users: userId },
+         },
+         {
+            new: true,
+         },
+      )
+         .populate('users', '-password')
+         .populate('grpupAdmin', '-password');
+
+         if(!removedChat){
+            res.status(404)
+            throw new Error("Chat Not found")
+         }else {
+            res.status(201).json(removedChat)
+         }
+   } catch (err) {
+      console.log(err);
+      res.status(400).json({
+         message: err.message,
+      });
    }
 });
