@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface User {
+export interface IUser {
   id: any;
   name: string;
   email: string;
@@ -11,13 +11,13 @@ interface User {
 const JWTToken = localStorage.getItem('token');
 
 interface initializeData {
-  user: User | null; 
+  user: IUser | null; 
   token: string;
   authSuccess: boolean;
 }
 
 interface UserPayload {
-  user: User | null
+  user: IUser | null
   token: string | '';
 }
 
@@ -40,6 +40,7 @@ const authSlice = createSlice({
       state.user = null; // Set user to null when unauthenticating
       state.token = '';
       state.authSuccess = false;
+      localStorage.removeItem("token")
     },
   },
 });

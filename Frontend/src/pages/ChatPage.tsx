@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 
-import SideDrawer from '../components/Authentication/miscellaneous/SideDrawer';
-import MyChats from '../components/Authentication/miscellaneous/MyChats';
-import ChatBox from '../components/Authentication/miscellaneous/ChatBox';
+import SideDrawer from '../components/miscellaneous/SideDrawer';
+import MyChats from '../components/miscellaneous/MyChats';
+import ChatBox from '../components/miscellaneous/ChatBox';
 
 const ChatPage = () => {
    return (

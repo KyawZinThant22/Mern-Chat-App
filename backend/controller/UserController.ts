@@ -17,7 +17,7 @@ export const getAllUser = asyncHandler(async (req: ExtendedRequest, res, next) =
            ],
         }
       : {};
-   const users = await userModel.find(keyword).find({ _id: { $ne: req?.user?._id } });
+   const users = await userModel.find(keyword).find({ _id: { $ne: req?.user?._id } }, "-password");
    res.send(users);
 });
 
