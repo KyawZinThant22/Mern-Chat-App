@@ -5,7 +5,7 @@ interface SelectedChatState {
   chatId: string | null;
 }
 
-const initialState: SelectedChatState = {
+const initialState: any = {
   chatId: null,
 };
 
