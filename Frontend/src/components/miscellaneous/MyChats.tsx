@@ -9,6 +9,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { selectChat } from '../../store/reducers/chat/selectedChat';
 import ChatLoading from '../ChatLoading';
 import { getSender } from '../../config/ChatLogic';
+import GroupChatModal from './GroupChatModel';
 
 const MyChats = () => {
    const { auth, chat, selectedChat } = useAppSelector((state: RootState) => state);
@@ -62,7 +63,7 @@ const MyChats = () => {
             alignItems="center"
          >
             My Chats
-            {/* <GroupChatModal> */}
+            <GroupChatModal>
             <Button
                display="flex"
                fontSize={{ base: '17px', md: '10px', lg: '17px' }}
@@ -70,7 +71,7 @@ const MyChats = () => {
             >
                New Group Chat
             </Button>
-            {/* </GroupChatModal> */}
+            </GroupChatModal>
          </Box>
          <Box
             display="flex"
