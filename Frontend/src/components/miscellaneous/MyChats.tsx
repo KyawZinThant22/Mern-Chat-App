@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect } from 'react';
 import { useAppSelector } from '../../store/hooks';
 import { RootState, dispatch } from '../../store';
 import { Box, Button, Stack, Text, useToast } from '@chakra-ui/react';
