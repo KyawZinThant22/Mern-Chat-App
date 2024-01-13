@@ -30,6 +30,7 @@ import UserListItem from '../useAvatar/UserListitem';
 import axios from 'axios';
 import { BACKEND_URL } from '../../utils/api';
 import { selectChat } from '../../store/reducers/chat/selectedChat';
+import { addChat } from '../../store/reducers/chat';
 
 export interface ISearchData {
    createdAt: string;
@@ -50,6 +51,7 @@ const SideDrawer = () => {
    const { isOpen, onOpen, onClose } = useDisclosure();
 
    const { user } = useAppSelector((state: RootState) => state.auth);
+   const {chat} = useAppSelector((state:RootState)=>state.chat)
    const token = useAppSelector((state: RootState) => state.auth.token);
    const dispatch = useAppDispatch();
    const toast = useToast();
@@ -106,7 +108,7 @@ const SideDrawer = () => {
          };
 
          const { data } = await axios.post(`${BACKEND_URL}chat`, { userId :id }, config);
-
+         if (!chat.find((c:any) => c._id === data._id)) dispatch(addChat([data, ...chat]))
          dispatch(selectChat(data));
          setLoadingChat(false);
          onClose();
@@ -122,7 +124,6 @@ const SideDrawer = () => {
       }
    };
 
-   console.log("result " ,searchResult)
    return (
       <>
          <Box

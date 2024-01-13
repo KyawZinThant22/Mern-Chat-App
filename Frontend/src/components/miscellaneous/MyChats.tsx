@@ -12,6 +12,7 @@ import { getSender } from '../../config/ChatLogic';
 
 const MyChats = () => {
    const { auth, chat, selectedChat } = useAppSelector((state: RootState) => state);
+   const selectedchatData = selectedChat.selectedChat
    const toast = useToast();
 
    const fetchChat = async () => {
@@ -39,7 +40,6 @@ const MyChats = () => {
    useEffect(() => {
       fetchChat();
    }, []);
-   console.log('all chat', chat.chat);
    return (
       <Box
          display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
@@ -89,8 +89,8 @@ const MyChats = () => {
                         <Box
                            onClick={() => dispatch(selectChat(chatt))}
                            cursor="pointer"
-                           bg={selectedChat === chatt ? '#38B2AC' : '#E8E8E8'}
-                           color={selectedChat === chatt ? 'white' : 'black'}
+                           bg={selectedchatData === chatt ? '#38B2AC' : '#E8E8E8'}
+                           color={selectedchatData === chatt ? 'white' : 'black'}
                            px={3}
                            py={2}
                            borderRadius="lg"
@@ -114,7 +114,7 @@ const MyChats = () => {
                   })}
                </Stack>
             ) : (
-               <>leee</>
+               <ChatLoading/>
             )}
          </Box>
       </Box>

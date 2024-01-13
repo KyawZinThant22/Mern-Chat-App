@@ -1,12 +1,10 @@
 // selectedChatSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface SelectedChatState {
-  chatId: string | null;
-}
+
 
 const initialState: any = {
-  chatId: null,
+  selectedChat : ""
 };
 
 const selectedChatSlice = createSlice({
@@ -14,7 +12,7 @@ const selectedChatSlice = createSlice({
   initialState,
   reducers: {
     selectChat: (state, action: PayloadAction<string>) => {
-      state.chatId = action.payload;
+      state.selectedChat = action.payload;
     },
   },
 });
