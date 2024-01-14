@@ -6,6 +6,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { selectChat } from '../store/reducers/chat/selectedChat';
 import { getSenderFull, getSender } from '../config/ChatLogic';
 import ProfileModal from './miscellaneous/ProfileModel';
+import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModel';
 
 interface ISingleChat {
    setFetchAgain: () => void;
@@ -15,6 +16,7 @@ const SingleChat = ({ setFetchAgain, fetchAgain }: ISingleChat) => {
    const { selectedChat } = useAppSelector((state: RootState) => state.selectedChat);
    const { user } = useAppSelector((state: RootState) => state.auth);
    const dispatch = useAppDispatch();
+   const fetchMessages = () => {};
    return (
       <>
          {selectedChat ? (
@@ -44,7 +46,14 @@ const SingleChat = ({ setFetchAgain, fetchAgain }: ISingleChat) => {
                         />
                      </>
                   ) : (
-                     <>{selectedChat.chatName.toUpperCase()}</>
+                     <>
+                        <>{selectedChat.chatName.toUpperCase()}</>
+                        <UpdateGroupChatModal
+                           fetchMessages={fetchMessages}
+                           fetchAgain={fetchAgain}
+                           setFetchAgain={setFetchAgain}
+                        />
+                     </>
                   )}
                </Text>
                <Box
