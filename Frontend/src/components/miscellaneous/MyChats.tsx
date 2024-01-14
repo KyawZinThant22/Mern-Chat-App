@@ -1,4 +1,4 @@
-import  { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppSelector } from '../../store/hooks';
 import { RootState, dispatch } from '../../store';
 import { Box, Button, Stack, Text, useToast } from '@chakra-ui/react';
@@ -11,9 +11,9 @@ import ChatLoading from '../ChatLoading';
 import { getSender } from '../../config/ChatLogic';
 import GroupChatModal from './GroupChatModel';
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}:{fetchAgain:Boolean}) => {
    const { auth, chat, selectedChat } = useAppSelector((state: RootState) => state);
-   const selectedchatData = selectedChat.selectedChat
+   const selectedchatData = selectedChat.selectedChat;
    const toast = useToast();
 
    const fetchChat = async () => {
@@ -40,10 +40,10 @@ const MyChats = () => {
 
    useEffect(() => {
       fetchChat();
-   }, []);
+   }, [fetchAgain]);
    return (
       <Box
-         display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
+         display={{ base: selectedchatData ? 'none' : 'flex', md: 'flex' }}
          flexDir="column"
          alignItems="center"
          p={3}
@@ -64,13 +64,13 @@ const MyChats = () => {
          >
             My Chats
             <GroupChatModal>
-            <Button
-               display="flex"
-               fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-               rightIcon={<AddIcon />}
-            >
-               New Group Chat
-            </Button>
+               <Button
+                  display="flex"
+                  fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+                  rightIcon={<AddIcon />}
+               >
+                  New Group Chat
+               </Button>
             </GroupChatModal>
          </Box>
          <Box
@@ -115,7 +115,7 @@ const MyChats = () => {
                   })}
                </Stack>
             ) : (
-               <ChatLoading/>
+               <ChatLoading />
             )}
          </Box>
       </Box>
