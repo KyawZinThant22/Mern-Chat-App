@@ -5,7 +5,6 @@ import SingleChat from '../SingleChat';
 
 interface IChatBox {
    fetchAgain: boolean;
-
    setFetchAgain: () => void;
 }
 

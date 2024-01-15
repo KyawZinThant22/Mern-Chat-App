@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setAuthUser, setUnAuth } from '../../store/reducers/auth';
-import { api } from '../../utils/api';
+import { BACKEND_URL, api } from '../../utils/api';
 
 const Login = () => {
    const [email, setEmail] = useState<string>('');
@@ -57,7 +57,7 @@ const Login = () => {
             },
          };
 
-         const { data } = await api.post('/api/user/login', { email, password }, config);
+         const { data } = await api.post(`${BACKEND_URL}user/login`, { email, password }, config);
 
          toast({
             title: 'Login Successful',

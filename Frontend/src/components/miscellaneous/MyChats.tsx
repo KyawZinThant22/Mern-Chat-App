@@ -25,6 +25,7 @@ const MyChats = ({fetchAgain}:{fetchAgain:Boolean}) => {
          };
 
          const { data } = await axios.get(`${BACKEND_URL}chat`, config);
+         console.log("chat data ", data)
          dispatch(addChat(data));
       } catch (error) {
          toast({
@@ -37,10 +38,11 @@ const MyChats = ({fetchAgain}:{fetchAgain:Boolean}) => {
          });
       }
    };
-
    useEffect(() => {
       fetchChat();
+      console.log("changed")
    }, [fetchAgain]);
+
    return (
       <Box
          display={{ base: selectedchatData ? 'none' : 'flex', md: 'flex' }}
@@ -116,6 +118,7 @@ const MyChats = ({fetchAgain}:{fetchAgain:Boolean}) => {
                </Stack>
             ) : (
                <ChatLoading />
+
             )}
          </Box>
       </Box>
